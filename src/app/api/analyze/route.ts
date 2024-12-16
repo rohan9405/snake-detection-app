@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
           content: [
             { 
               type: "text", 
-              text: "Analyze this snake image and provide the following information:\n1. Species identification\n2. Whether it's venomous\n3. Key identifying features\n4. Safety concerns\nFormat the response as a JSON object with these fields: species, venomous (true/false), features, safety_concerns. If the image does not contain a snake, respond with a simple message stating that." 
+              text: "Analyze this snake image and provide the following information:\n1. Species identification (include confidence level from 0-100)\n2. Whether it's venomous\n3. Key identifying features\n4. Safety concerns\nFormat the response as a JSON object with these fields: species, confidence (number between 0-100), venomous (true/false), features, safety_concerns. If the image does not contain a snake, respond with a simple message stating that." 
             },
             {
               type: "image_url",
