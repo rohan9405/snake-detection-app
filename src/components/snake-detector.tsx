@@ -5,7 +5,6 @@ import { Camera, Upload, Info, AlertTriangle, Video } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from "@/components/ui/progress";
 import Image from 'next/image';
 
 // Update interface to match API response structure
@@ -35,18 +34,6 @@ const SnakeDetector = () => {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     );
-  };
-
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 90) return 'text-green-600';
-    if (confidence >= 70) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-  
-  const getConfidenceLabel = (confidence: number) => {
-    if (confidence >= 90) return 'High';
-    if (confidence >= 70) return 'Medium';
-    return 'Low';
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
