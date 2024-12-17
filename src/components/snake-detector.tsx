@@ -17,10 +17,17 @@ interface APIResponse {
 
 interface AnalysisResult {
   species: string;
-  venomous: boolean;
   confidence: number;
+  venomous: boolean;
   features: string;
   safety_concerns: string;
+  habitat: string;
+  first_aid_steps: string[];
+  sources: {
+    name: string;
+    url: string;
+  }[];
+  interesting_facts: string[];
 }
 
 const SnakeDetector = () => {
@@ -139,14 +146,21 @@ const SnakeDetector = () => {
 
   return (
     
-    <div className="max-w-4xl mx-auto p-4 space-y-4 text-white">
+    <div className="w-full max-w-4xl mx-auto p-2 sm:p-4 space-y-4 text-white">
       <Card className="bg-slate-900 border-slate-800">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-white">
-            <Camera className="w-6 h-6" />
-            Snake Species Detector
-          </CardTitle>
+        <CardHeader className="pb-2">
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center shadow-lg">
+                <Camera className="w-6 h-6 text-white" />
+              </div>
+              <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent text-center sm:text-left">
+                Is it poisonous?
+              </CardTitle>
+            </div>
+          </div>
         </CardHeader>
+
         <CardContent className="space-y-4">
           <div className="flex flex-col items-center gap-4">
           <div className="w-full max-w-xl aspect-video bg-slate-800 rounded-lg flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-slate-700 transition-colors"
@@ -162,55 +176,47 @@ const SnakeDetector = () => {
               ) : (
                 <div className="text-slate-400 flex flex-col items-center">
                   <Upload className="w-12 h-12 mb-2" />
-                  <p>Upload an image of a snake</p>
+                  <p>Upload an image of a snake and detect instantly</p>
                 </div>
               )}
             </div>
             
-            <div className="flex gap-4">
-            {selectedImage && (
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+              {selectedImage && (
                 <Button
                   variant="outline"
                   onClick={() => document.getElementById('imageInput')?.click()}
                   disabled={isLoading}
-                  className="text-white border-slate-700 hover:bg-slate-800"
+                  className="text-white border-slate-700 hover:bg-slate-800 w-full sm:w-auto"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Change Image
                 </Button>
-               )}
+              )}
 
-                {isMobileDevice() && (
-                  <Button
-                    variant="outline"
-                    onClick={handleCameraCapture}
-                    disabled={isLoading}
-                    className="text-white border-slate-700 hover:bg-slate-800"
-                  >
-                    <Video className="w-4 h-4 mr-2" />
-                    Take Photo
-                  </Button>
-                )}
-
-                <input
-                  id="imageInput"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageUpload}
+              {isMobileDevice() && (
+                <Button
+                  variant="outline"
+                  onClick={handleCameraCapture}
                   disabled={isLoading}
-                />
-               {selectedImage && ( 
+                  className="text-white border-slate-700 hover:bg-slate-800 w-full sm:w-auto"
+                >
+                  <Video className="w-4 h-4 mr-2" />
+                  Take Photo
+                </Button>
+              )}
+
+              {selectedImage && ( 
                 <Button
                   variant="default"
                   onClick={analyzeImage}
                   disabled={!selectedImage || isLoading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
                 >
                   {isLoading ? 'Analyzing...' : 'Analyze Snake'}
                 </Button>
-                )}
-              </div>
+              )}
+            </div>
 
           </div>
 
@@ -245,42 +251,89 @@ const SnakeDetector = () => {
               </div>
               </CardHeader>
               <CardContent>
-              <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 bg-slate-800/50 rounded-lg flex items-center justify-center">
-                        <span className={`px-6 py-3 rounded-md text-lg font-semibold ${
-                          analysis.venomous 
-                            ? 'bg-red-900/80 text-red-400 border-2 border-red-800' 
-                            : 'bg-green-900/80 text-green-400 border-2 border-green-800'
-                        }`}>
-                          {analysis.venomous ? 'Poisonous' : 'Not Poisonous'}
-                        </span>
-                      </div>
+                      <div className="space-y-4">
 
-                      <div className="p-4 bg-slate-800/50 rounded-lg">
-                        <div className="flex flex-col gap-3">
-                        <div className="text-gray-400 mb-1">Species:</div>
-                          <div className="text-white font-medium leading-snug">
-                            {analysis.species}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                          <div className="p-4 bg-slate-800/50 rounded-lg flex items-center justify-center">
+                            <span className={`px-6 py-3 rounded-md text-lg font-semibold ${
+                                analysis.venomous 
+                                  ? 'bg-red-900/80 text-red-400 border-2 border-red-800' 
+                                  : 'bg-green-900/80 text-green-400 border-2 border-green-800'
+                              }`}>
+                              {analysis.venomous ? 'Poisonous' : 'Not Poisonous'}
+                            </span>
                           </div>
-                                
-                        
+
+                            <div className="p-4 bg-slate-800/50 rounded-lg">
+                              <div className="flex flex-col gap-3">
+                                <div className="text-gray-400 mb-1">Species:</div>
+                                  <div className="text-white font-medium leading-snug">
+                                    {analysis.species}
+                                  </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="p-4 bg-slate-800/50 rounded-lg">
-                            <div className="text-gray-400 mb-1">Features:</div>
-                            <div className="text-white">{analysis.features}</div>
-                          </div>
-                          <div className="p-4 bg-slate-800/50 rounded-lg">
-                            <div className="text-gray-400 mb-1">Safety Concerns:</div>
-                            <div className="text-red-400">{analysis.safety_concerns}</div>
-                          </div>
                         </div>
 
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div className="p-4 bg-slate-800/50 rounded-lg">
+                                <div className="text-gray-400 mb-1 text-sm sm:text-base">Features:</div>
+                                <div className="text-white text-sm sm:text-base">{analysis.features}</div>
+                              </div>
+
+                              <div className="p-4 bg-slate-800/50 rounded-lg">
+                                <div className="text-gray-400 mb-1">Safety Concerns:</div>
+                                <div className="text-red-400">{analysis.safety_concerns}</div>
+                              </div>
+
+                        </div>
                         
-                  </div>
+                            <div className="p-4 bg-slate-800/50 rounded-lg">
+                              <div className="text-gray-400 mb-1">Usually Found:</div>
+                              <div className="text-white">{analysis.habitat}</div>
+                            </div>
+
+                            <div className="p-4 bg-slate-800/50 rounded-lg mt-4">
+                              <div className="text-gray-400 mb-2">What to do if bitten?</div>
+                              <div className="text-white space-y-2">
+                                {analysis.first_aid_steps.map((step, index) => (
+                                  <div key={index} className="flex gap-2 items-start">
+                                    <span className="font-medium">{index + 1}.</span>
+                                    <span>{step}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                        <div className="p-4 bg-slate-800/50 rounded-lg mt-4">
+                          <div className="text-gray-400 mb-2">More Information</div>
+                            <div className="text-white space-y-2">
+                              {analysis.interesting_facts.map((fact, index) => (
+                                <div key={index} className="flex gap-2">
+                                  <span>{index + 1}.</span>
+                                  <span>{fact}</span>
+                                </div>
+                              ))}
+                            </div>
+                        </div>
+                            
+                        <div className="text-blue-400 space-y-1 text-xs sm:text-sm break-words">
+                          {analysis.sources.map((source, index) => (
+                            <div key={index} className="flex">
+                              <span className="mr-1">{index + 1}.</span>
+                              <a 
+                                href={source.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="hover:text-blue-300 underline break-all"
+                              >
+                                {source.name}
+                              </a>
+                            </div>
+                          ))}
+                        </div>
+                        
+                      </div>
               </CardContent>
             </Card>
           )}
