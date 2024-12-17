@@ -194,19 +194,27 @@ const SnakeDetector = () => {
                 </Button>
               )}
 
-              {isMobileDevice() && (
-                <Button
-                  variant="outline"
-                  onClick={handleCameraCapture}
-                  disabled={isLoading}
-                  className="text-white border-slate-700 hover:bg-slate-800 w-full sm:w-auto"
-                >
-                  <Video className="w-4 h-4 mr-2" />
-                  Take Photo
-                </Button>
-              )}
+                {isMobileDevice() && (
+                    <Button
+                      variant="outline"
+                      onClick={handleCameraCapture}
+                      disabled={isLoading}
+                      className="text-white border-slate-700 hover:bg-slate-800 w-full sm:w-auto"
+                    >
+                      <Video className="w-4 h-4 mr-2" />
+                      Take Photo
+                    </Button>
+                  )}
 
-              {selectedImage && ( 
+                <input
+                  id="imageInput"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                  disabled={isLoading}
+                />
+               {selectedImage && ( 
                 <Button
                   variant="default"
                   onClick={analyzeImage}
@@ -271,20 +279,20 @@ const SnakeDetector = () => {
                                   <div className="text-white font-medium leading-snug">
                                     {analysis.species}
                                   </div>
+                                </div>
                               </div>
                             </div>
-                        </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div className="p-4 bg-slate-800/50 rounded-lg">
                                 <div className="text-gray-400 mb-1 text-sm sm:text-base">Features:</div>
                                 <div className="text-white text-sm sm:text-base">{analysis.features}</div>
                               </div>
 
-                              <div className="p-4 bg-slate-800/50 rounded-lg">
-                                <div className="text-gray-400 mb-1">Safety Concerns:</div>
-                                <div className="text-red-400">{analysis.safety_concerns}</div>
-                              </div>
+                            <div className="p-4 bg-slate-800/50 rounded-lg">
+                              <div className="text-gray-400 mb-1">Safety Concerns:</div>
+                              <div className="text-red-400">{analysis.safety_concerns}</div>
+                            </div>
 
                         </div>
                         
