@@ -147,21 +147,18 @@ const SnakeDetector = () => {
   return (
     
     <div className="w-full max-w-4xl mx-auto p-2 sm:p-4 space-y-4 text-white">
-      <Card className="bg-slate-900 border-slate-800">
-        <CardHeader className="pb-2">
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center shadow-lg">
-                <Camera className="w-6 h-6 text-white" />
-              </div>
-              <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent text-center sm:text-left">
-                Is it poisonous?
-              </CardTitle>
-            </div>
-          </div>
-        </CardHeader>
+      <Card className="bg-slate-900 border-slate-800 shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+      <div className="w-full relative h-48 sm:h-64">
+        <Image
+          src="/images/snake-header.png"
+          alt="Is it Poisonous?"
+          fill
+          className="object-cover rounded-t-lg"
+          priority
+        />
+      </div>
 
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-6">
           <div className="flex flex-col items-center gap-4">
           <div className="w-full max-w-xl aspect-video bg-slate-800 rounded-lg flex items-center justify-center relative overflow-hidden cursor-pointer hover:bg-slate-700 transition-colors"
   onClick={() => document.getElementById('imageInput')?.click()}>
@@ -219,7 +216,7 @@ const SnakeDetector = () => {
                   variant="default"
                   onClick={analyzeImage}
                   disabled={!selectedImage || isLoading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
+                  className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
                 >
                   {isLoading ? 'Analyzing...' : 'Analyze Snake'}
                 </Button>
@@ -250,9 +247,9 @@ const SnakeDetector = () => {
                   Analysis Results
                 </CardTitle>
                 <div className={`px-3 py-1 rounded-full text-sm whitespace-nowrap ${
-                  analysis.confidence >= 90 ? 'bg-green-900/80 text-green-400 border border-green-800' :
-                  analysis.confidence >= 70 ? 'bg-yellow-900/80 text-yellow-400 border border-yellow-800' :
-                    'bg-red-900/80 text-red-400 border border-red-800'
+                  analysis.confidence >= 90 ? 'bg-green-900/80 text-green-400 border border-green-500' : // Adjusted green shades
+                  analysis.confidence >= 70 ? 'bg-yellow-900/80 text-yellow-400 border border-yellow-500' :
+                  'bg-red-900/80 text-red-400 border border-red-500'
                 }`}>
                   Confidence: {analysis.confidence}%
                 </div>
