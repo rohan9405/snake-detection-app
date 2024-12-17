@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Camera, Upload, Info, AlertTriangle, Video } from 'lucide-react';
+import { Upload, Info, AlertTriangle, Video } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
